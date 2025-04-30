@@ -18,7 +18,7 @@ def main():
         st.text(item)
     
     # Calculator display
-    display = st.text_input("", value=st.session_state.current_number, key="display")
+    display = st.text_input("Calculator Display", value=st.session_state.current_number, key="display", label_visibility="collapsed")
 
     # Create button layout
     col1, col2, col3, col4 = st.columns(4)
