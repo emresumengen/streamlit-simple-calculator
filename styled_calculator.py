@@ -6,16 +6,14 @@ if 'current_number' not in st.session_state:
 if 'history' not in st.session_state:
     st.session_state.history = []
 
-# Custom CSS for calculator styling and centering
+# Custom CSS for calculator styling and layout
 st.markdown("""
 <style>
     .main-container {
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
+        flex-direction: row;
         padding: 20px;
+        gap: 20px;
     }
     
     .calculator {
@@ -27,13 +25,23 @@ st.markdown("""
     }
     
     .history {
-        width: 400px;
-        margin-bottom: 20px;
+        width: 300px;
         background-color: #f8f9fa;
         padding: 10px;
         border-radius: 10px;
-        max-height: 200px;
+        max-height: 600px;
         overflow-y: auto;
+    }
+    
+    .history-item {
+        cursor: pointer;
+        padding: 5px;
+        margin: 2px 0;
+        border-radius: 3px;
+    }
+    
+    .history-item:hover {
+        background-color: #e9ecef;
     }
     
     .stButton > button {
@@ -66,17 +74,10 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Create centered container
+# Create main container with flex layout
 st.markdown('<div class="main-container">', unsafe_allow_html=True)
 
-# History section
-st.markdown('<div class="history">', unsafe_allow_html=True)
-st.markdown("### History")
-for item in st.session_state.history:
-    st.text(item)
-st.markdown('</div>', unsafe_allow_html=True)
-
-# Calculator container
+# Calculator container (left side)
 st.markdown('<div class="calculator">', unsafe_allow_html=True)
 
 # Calculator display
@@ -183,6 +184,20 @@ with col4:
             st.session_state.current_number = result
         except:
             st.session_state.current_number = "Error"
+        st.rerun()
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+# History section (right side)
+st.markdown('<div class="history">', unsafe_allow_html=True)
+st.markdown("### History")
+
+# Make history items clickable
+for idx, item in enumerate(st.session_state.history):
+    if st.button(item, key=f"history_{idx}"):
+        # Extract the result part (after the '=')
+        result = item.split('=')[1].strip()
+        st.session_state.current_number = result
         st.rerun()
 
 st.markdown('</div>', unsafe_allow_html=True)
